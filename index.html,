@@ -1,0 +1,149 @@
+<html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PUTRI | Korean Botanical House</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            background: #f8f5ef;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Halaman website */
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        /* Tombol musik */
+        .music-button {
+            position: fixed;
+            top: 22px;
+            right: 25px;
+            z-index: 99999;
+
+            background: #111;
+            color: #fff;
+            border: none;
+            border-radius: 30px;
+
+            padding: 11px 19px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+
+            cursor: pointer;
+            transition: .3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,.15);
+        }
+
+        .music-button:hover {
+            background: #333;
+            transform: translateY(-2px);
+        }
+
+        .music-button:active {
+            transform: scale(.96);
+        }
+
+        @media (max-width: 600px) {
+            .music-button {
+                top: 15px;
+                right: 15px;
+                padding: 10px 15px;
+                font-size: 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Musik utama -->
+    <audio id="backgroundMusic" loop preload="auto">
+        <source src="./music.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Tombol Play Music -->
+    <button class="music-button" id="musicButton" onclick="toggleMusic()">
+        PLAY MUSIC
+    </button>
+
+    <!-- Website dimuat di dalam iframe -->
+    <iframe
+        id="websiteFrame"
+        name="websiteFrame"
+        src="login.html"
+        allow="autoplay"
+    ></iframe>
+
+    <script>
+        const bgMusic = document.getElementById("backgroundMusic");
+        const musicButton = document.getElementById("musicButton");
+
+        let isPlaying = false;
+
+        // Fungsi memutar dan menghentikan musik
+        function toggleMusic() {
+            if (isPlaying) {
+                bgMusic.pause();
+                isPlaying = false;
+                musicButton.textContent = "PLAY MUSIC";
+            } else {
+                bgMusic.play()
+                    .then(() => {
+                        isPlaying = true;
+                        musicButton.textContent = "PAUSE MUSIC";
+                    })
+                    .catch(error => {
+                        console.log("Musik tidak dapat diputar:", error);
+                        musicButton.textContent = "PLAY MUSIC";
+                    });
+            }
+        }
+
+        // Bisa dipanggil oleh halaman di dalam iframe
+        function playMusic() {
+            bgMusic.play()
+                .then(() => {
+                    isPlaying = true;
+                    musicButton.textContent = "PAUSE MUSIC";
+                })
+                .catch(error => {
+                    console.log("Musik tidak dapat diputar:", error);
+                });
+        }
+
+        function pauseMusic() {
+            bgMusic.pause();
+            isPlaying = false;
+            musicButton.textContent = "PLAY MUSIC";
+        }
+
+        // Memperbarui status tombol
+        bgMusic.addEventListener("play", () => {
+            isPlaying = true;
+            musicButton.textContent = "PAUSE MUSIC";
+        });
+
+        bgMusic.addEventListener("pause", () => {
+            isPlaying = false;
+            musicButton.textContent = "PLAY MUSIC";
+        });
+    </script>
+
+</body>
+</html>
